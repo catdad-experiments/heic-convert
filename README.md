@@ -27,7 +27,7 @@ const { promisify } = require('util');
 const fs = require('fs');
 
 (async () => {
-  const inputBuffer = await promosofy(fs.readFile)('/path/to/my/image.heic');
+  const inputBuffer = await promisify(fs.readFile)('/path/to/my/image.heic');
   const outputBuffer = await convert({
     buffer: inputBuffer, // the HEIC file buffer
     format: 'JPEG',      // output format
@@ -45,7 +45,7 @@ const { promisify } = require('util');
 const fs = require('fs');
 
 (async () => {
-  const inputBuffer = await promosofy(fs.readFile)('/path/to/my/image.heic');
+  const inputBuffer = await promisify(fs.readFile)('/path/to/my/image.heic');
   const outputBuffer = await convert({
     buffer: inputBuffer, // the HEIC file buffer
     format: 'PNG'        // output format
