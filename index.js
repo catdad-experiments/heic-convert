@@ -13,7 +13,7 @@ const createImage = promisify(({ data, width, height }, callback) => {
 
 const to = {
   JPEG: async ({ image, quality }) => {
-    return await image.quality(quality).getBufferAsync(Jimp.MIME_JPEG);
+    return await image.quality(Math.floor(quality * 100)).getBufferAsync(Jimp.MIME_JPEG);
   },
   PNG: async ({ image }) => {
     return await image.getBufferAsync(Jimp.MIME_PNG);
