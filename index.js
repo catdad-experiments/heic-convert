@@ -22,7 +22,7 @@ const to = {
 
 module.exports = async ({ buffer, format, quality = 0.92 }) => {
   if (!to[format]) {
-    throw new Error(`output format needs to be one of ${Object.keys(to)}`);
+    throw new Error(`output format needs to be one of [${Object.keys(to)}]`);
   }
 
   const { width, height, data } = await decode({ buffer });
