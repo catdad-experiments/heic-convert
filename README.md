@@ -56,3 +56,8 @@ const fs = require('fs');
 ```
 
 _Note that while the converter returns a Promise and is overall asynchronous, a lot of work is still done synchronously, so you should consider using a worker thread in order to not block the main thread in highly concurrent production environments._
+
+## Related
+
+* [heic-decode](https://github.com/catdad-experiments/heic-decode) - decode heic images to raw image data
+* [libheif-js](https://github.com/catdad-experiments/libheif-js) - libheif as a pure-javascript npm module
