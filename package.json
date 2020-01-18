@@ -24,5 +24,10 @@
   "bugs": {
     "url": "https://github.com/catdad-experiments/heic-convert/issues"
   },
-  "homepage": "https://github.com/catdad-experiments/heic-convert#readme"
+  "homepage": "https://github.com/catdad-experiments/heic-convert#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "heic-decode": "^1.0.0",
+    "jimp": "^0.9.3"
+  }
 }
