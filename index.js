@@ -1,5 +1,6 @@
 const { promisify } = require('util');
 
+const jpegJs = require('jpeg-js');
 const Jimp = require('jimp');
 const decode = require('heic-decode');
 
@@ -20,6 +21,10 @@ const to = {
   }
 };
 
+const encode = {
+  JPEG: ({ data, width, height, quality }) => jpegJs.encode({ data, width, height }, quality).data
+};
+
 module.exports = async ({ buffer, format, quality = 0.92 }) => {
   if (!to[format]) {
     throw new Error(`output format needs to be one of [${Object.keys(to)}]`);
@@ -28,6 +33,10 @@ module.exports = async ({ buffer, format, quality = 0.92 }) => {
   const { width, height, data } = await decode({ buffer });
 
   const image = await createImage({ width, height, data });
+
+  if (format === 'JPEG') {
+    return encode.JPEG({ width, height, data: Buffer.from(data), quality: Math.floor(quality * 100) });
+  }
 
   return await to[format]({ image, quality });
 };
