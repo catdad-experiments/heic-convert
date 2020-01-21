@@ -37,7 +37,7 @@ describe('heic-convert', () => {
     await assertImage(output100, 'image/jpeg', 'f7f1ae16c3fbf035d1b71b1995230305125236d0c9f0513c905ab1cb39fc68e9');
   });
 
-  it('converts known image to pmg', async () => {
+  it('converts known image to png', async () => {
     const buffer = await readFile(path.resolve(root, 'temp', '0002.heic'));
 
     const output = await convert({ buffer, format: 'PNG' });
