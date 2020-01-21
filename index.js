@@ -1,28 +1,24 @@
-const { promisify } = require('util');
-
 const jpegJs = require('jpeg-js');
-const Jimp = require('jimp');
+const { PNG } = require('pngjs');
+
 const decode = require('heic-decode');
 
-const createImage = promisify(({ data, width, height }, callback) => {
-  try {
-    new Jimp({ data: Buffer.from(data), width, height }, callback);
-  } catch (e) {
-    callback(e);
-  }
-});
-
 const to = {
-  JPEG: async ({ image, quality }) => {
-    return await image.quality(Math.floor(quality * 100)).getBufferAsync(Jimp.MIME_JPEG);
-  },
-  PNG: async ({ image }) => {
-    return await image.getBufferAsync(Jimp.MIME_PNG);
-  }
-};
+  JPEG: ({ data, width, height, quality }) => jpegJs.encode({ data, width, height }, quality).data,
+  PNG: ({ data, width, height }) => {
+    const png = new PNG({ width, height });
+    png.data = data;
 
-const encode = {
-  JPEG: ({ data, width, height, quality }) => jpegJs.encode({ data, width, height }, quality).data
+    return PNG.sync.write(png, {
+      width: width,
+      height: height,
+      deflateLevel: 9,
+      deflateStrategy: 3,
+      filterType: -1,
+      colorType: 6,
+      inputHasAlpha: true
+    });
+  }
 };
 
 module.exports = async ({ buffer, format, quality = 0.92 }) => {
@@ -32,11 +28,5 @@ module.exports = async ({ buffer, format, quality = 0.92 }) => {
 
   const { width, height, data } = await decode({ buffer });
 
-  const image = await createImage({ width, height, data });
-
-  if (format === 'JPEG') {
-    return encode.JPEG({ width, height, data: Buffer.from(data), quality: Math.floor(quality * 100) });
-  }
-
-  return await to[format]({ image, quality });
+  return await to[format]({ width, height, data: Buffer.from(data), quality: Math.floor(quality * 100) });
 };

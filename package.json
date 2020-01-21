@@ -37,8 +37,8 @@
   },
   "dependencies": {
     "heic-decode": "^1.0.0",
-    "jimp": "^0.9.3",
-    "jpeg-js": "^0.3.6"
+    "jpeg-js": "^0.3.6",
+    "pngjs": "^3.4.0"
   },
   "engines": {
     "node": ">=8.0.0"
