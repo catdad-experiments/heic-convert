@@ -59,5 +59,6 @@ _Note that while the converter returns a Promise and is overall asynchronous, a 
 
 ## Related
 
+* [heic-cli](https://github.com/catdad-experiments/heic-cli) - convert heic/heif images to jpeg or png from the command line
 * [heic-decode](https://github.com/catdad-experiments/heic-decode) - decode heic images to raw image data
 * [libheif-js](https://github.com/catdad-experiments/libheif-js) - libheif as a pure-javascript npm module
