@@ -1,6 +1,6 @@
 # heic-convert
 
-Convert HEIC/HEIF images to JPEG and PNG
+> Convert HEIC/HEIF images to JPEG and PNG
 
 [![travis][travis.svg]][travis.link]
 [![npm-downloads][npm-downloads.svg]][npm.link]
