@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "pretest": "node scripts/images.js",
-    "test": "mocha --timeout 5000 \"test/**/*.js\""
+    "test": "mocha --timeout 20000 --slow 0 \"test/**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -36,7 +36,7 @@
     "rootrequire": "^1.0.0"
   },
   "dependencies": {
-    "heic-decode": "^1.0.0",
+    "heic-decode": "^1.1.0",
     "jpeg-js": "^0.3.6",
     "pngjs": "^3.4.0"
   },

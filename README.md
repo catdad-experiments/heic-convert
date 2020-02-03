@@ -20,7 +20,7 @@ npm install heic-decode
 
 ## Usage
 
-Convert HEIC to JPEG
+Convert the main image in a HEIC to JPEG
 
 ```javascript
 const { promisify } = require('util');
@@ -38,7 +38,7 @@ const fs = require('fs');
 })();
 ```
 
-Convert HEIC to PNG
+Convert the main imgae in a HEIC to PNG
 
 ```javascript
 const { promisify } = require('util');
@@ -54,6 +54,26 @@ const fs = require('fs');
   await promisify(fs.writeFile)('./result.png', outputBuffer);
 })();
 ```
+
+Convert all images in a HEIC
+
+```javascript
+const { promisify } = require('util');
+const fs = require('fs');
+
+(async () => {
+  const inputBuffer = await promisify(fs.readFile)('/path/to/my/image.heic');
+  const images = await convert({ inputBuffer, format: 'JPEG' });
+
+  for (let idx in images) {
+    const image = images[idx];
+    const outputBuffer = await image.convert();
+    await promisify(fs.writeFile)(`./result-${idx}.jpg`, outputBuffer);
+  }
+})();
+```
+
+The work to convert an image is done when calling `image.convert()`, so if you only need one of the images in a multi-image file, you can convert just that one from tha `images` array and skip doing any work for the remaining images.
 
 _Note that while the converter returns a Promise and is overall asynchronous, a lot of work is still done synchronously, so you should consider using a worker thread in order to not block the main thread in highly concurrent production environments._
 
