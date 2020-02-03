@@ -4,7 +4,7 @@
   "description": "Convert HEIC/HEIF images to JPEG and PNG",
   "main": "index.js",
   "scripts": {
-    "pretestX": "node scripts/images.js",
+    "pretest": "node scripts/images.js",
     "test": "mocha --timeout 20000 --slow 0 \"test/**/*.js\""
   },
   "repository": {
