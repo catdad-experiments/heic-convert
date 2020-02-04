@@ -15,7 +15,7 @@
 ## Install
 
 ```bash
-npm install heic-decode
+npm install heic-convert
 ```
 
 ## Usage
