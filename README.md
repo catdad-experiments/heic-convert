@@ -25,6 +25,7 @@ Convert the main image in a HEIC to JPEG
 ```javascript
 const { promisify } = require('util');
 const fs = require('fs');
+const convert = require('heic-convert');
 
 (async () => {
   const inputBuffer = await promisify(fs.readFile)('/path/to/my/image.heic');
@@ -43,6 +44,7 @@ Convert the main imgae in a HEIC to PNG
 ```javascript
 const { promisify } = require('util');
 const fs = require('fs');
+const convert = require('heic-convert');
 
 (async () => {
   const inputBuffer = await promisify(fs.readFile)('/path/to/my/image.heic');
@@ -60,6 +62,7 @@ Convert all images in a HEIC
 ```javascript
 const { promisify } = require('util');
 const fs = require('fs');
+const convert = require('heic-convert');
 
 (async () => {
   const inputBuffer = await promisify(fs.readFile)('/path/to/my/image.heic');
