@@ -66,7 +66,10 @@ const convert = require('heic-convert');
 
 (async () => {
   const inputBuffer = await promisify(fs.readFile)('/path/to/my/image.heic');
-  const images = await convert({ inputBuffer, format: 'JPEG' });
+  const images = await convert({
+    buffer: inputBuffer, // the HEIC file buffer
+    format: 'JPEG'       // output format
+  });
 
   for (let idx in images) {
     const image = images[idx];
