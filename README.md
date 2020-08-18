@@ -39,7 +39,7 @@ const convert = require('heic-convert');
 })();
 ```
 
-Convert the main imgae in a HEIC to PNG
+Convert the main image in a HEIC to PNG
 
 ```javascript
 const { promisify } = require('util');
