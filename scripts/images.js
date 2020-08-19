@@ -32,6 +32,11 @@ const images = [{
 
 (async () => {
   for (let image of images) {
+    // we won't assume malicious intent... if the images exist, don't bother fetching them
+    if (await fs.exists(image.path)) {
+      continue;
+    }
+
     const { url, name } = image;
     const res = await fetch(url);
 
