@@ -27,12 +27,14 @@
   },
   "homepage": "https://github.com/catdad-experiments/heic-convert#readme",
   "devDependencies": {
+    "buffer-to-uint8array": "^1.1.0",
     "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "file-type": "^13.1.0",
     "fs-extra": "^8.1.0",
     "mocha": "^7.0.0",
     "node-fetch": "^2.6.0",
+    "pixelmatch": "^5.2.1",
     "rootrequire": "^1.0.0"
   },
   "dependencies": {

@@ -2,11 +2,14 @@
 const { promisify } = require('util');
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 
 const root = require('rootrequire');
 const { fromBuffer: filetype } = require('file-type');
 const { expect } = require('chai');
+const toUint8 = require('buffer-to-uint8array');
+const pixelmatch = require('pixelmatch');
+const { PNG } = require('pngjs');
+const jpegJs = require('jpeg-js');
 
 const convert = require('../');
 
@@ -17,62 +20,98 @@ describe('heic-convert', () => {
     expect(convert).to.be.a('function');
   });
 
-  const assertImage = async (buffer, mime, hash) => {
+  const decode = {
+    'image/png': buffer => PNG.sync.read(buffer),
+    'image/jpeg': buffer => jpegJs.decode(buffer)
+  };
+
+  const readControl = async name => {
+    const buffer = await readFile(path.resolve(root, `temp/${name}`));
+    return decode['image/png'](buffer);
+  };
+
+  const compare = (expected, actual, width, height, errString = 'actual image did not match control image') => {
+    const result = pixelmatch(toUint8(Buffer.from(expected)), toUint8(Buffer.from(actual)), null, width, height, {
+      threshold: 0.1
+    });
+
+    // allow 5% of pixels to be different
+    expect(result).to.be.below(width * height * 0.05, errString);
+  };
+
+  const assertImage = async (buffer, mime, control) => {
     const type = await filetype(buffer);
     expect(type.mime).to.equal(mime);
 
-    const actual = crypto.createHash('sha256').update(buffer).digest('hex');
-    expect(actual).to.equal(hash);
+    const actual = decode[mime](buffer);
+
+    expect(actual.width).to.equal(control.width);
+    expect(actual.height).to.equal(control.height);
+
+    compare(control.data, actual.data, control.width, control.height);
   };
 
   it('converts known image to jpeg', async () => {
+    const control = await readControl('0002-control.png');
     const buffer = await readFile(path.resolve(root, 'temp', '0002.heic'));
 
     // quality of 92%
     const output92 = await convert({ buffer, format: 'JPEG' });
-    await assertImage(output92, 'image/jpeg', 'a7957c0517ef4c06a605a41097e3b500b7947151aec7873b4e604bfc2a82e8d6');
+    await assertImage(output92, 'image/jpeg', control);
 
     // quality of 100%
     const output100 = await convert({ buffer, format: 'JPEG', quality: 1 });
-    await assertImage(output100, 'image/jpeg', 'f7f1ae16c3fbf035d1b71b1995230305125236d0c9f0513c905ab1cb39fc68e9');
+    await assertImage(output100, 'image/jpeg', control);
+
+    expect(output92).to.not.deep.equal(output100);
+    expect(output92.length).to.be.below(output100.length);
   });
 
   it('converts known image to png', async () => {
+    const control = await readControl('0002-control.png');
     const buffer = await readFile(path.resolve(root, 'temp', '0002.heic'));
 
     const output = await convert({ buffer, format: 'PNG' });
-    await assertImage(output, 'image/png', '0efc9a4c58d053fb42591acd83f8a5005ee2844555af29b5aba77a766b317935');
+    await assertImage(output, 'image/png', control);
   });
 
   it('converts multiple images inside a single file to jpeg', async () => {
+    const controls = await Promise.all([
+      readControl('0003-0-control.png'),
+      readControl('0003-1-control.png'),
+    ]);
     const buffer = await readFile(path.resolve(root, 'temp', '0003.heic'));
     const images = await convert.all({ buffer, format: 'JPEG' });
 
     expect(images).to.have.lengthOf(3);
 
-    for (let { i, hash: expectedHash } of [
-      { i: 0, hash: '2d9dc6e640b301e4614ac37368a706236ed421d9b928f6916429b0076fe47654' },
-      { i: 1, hash: '141a9cf07b46ffb2718246b40442cd0df0bcd4ee7d94b25bc3d1164e90fbc95b' },
-      { i: 2, hash: '141a9cf07b46ffb2718246b40442cd0df0bcd4ee7d94b25bc3d1164e90fbc95b' },
+    for (let { i, control } of [
+      { i: 0, control: controls[0] },
+      { i: 1, control: controls[1] },
+      { i: 2, control: controls[1] },
     ]) {
       expect(images[i]).to.have.a.property('convert').and.to.be.a('function');
-      await assertImage(await images[i].convert(), 'image/jpeg', expectedHash);
+      await assertImage(await images[i].convert(), 'image/jpeg', control);
     }
   });
 
   it('converts multiple images inside a single file to png', async () => {
+    const controls = await Promise.all([
+      readControl('0003-0-control.png'),
+      readControl('0003-1-control.png'),
+    ]);
     const buffer = await readFile(path.resolve(root, 'temp', '0003.heic'));
     const images = await convert.all({ buffer, format: 'PNG' });
 
     expect(images).to.have.lengthOf(3);
 
-    for (let { i, hash: expectedHash } of [
-      { i: 0, hash: '14f4a6b316f511699bf686e60b8bd7b34cc6953aeaed0fb344e6211eaaf3b83a' },
-      { i: 1, hash: '1e8745b336ade784e761028bc34e1906538487efffe667a33cd705033f36e728' },
-      { i: 2, hash: '1e8745b336ade784e761028bc34e1906538487efffe667a33cd705033f36e728' },
+    for (let { i, control } of [
+      { i: 0, control: controls[0] },
+      { i: 1, control: controls[1] },
+      { i: 2, control: controls[1] },
     ]) {
       expect(images[i]).to.have.a.property('convert').and.to.be.a('function');
-      await assertImage(await images[i].convert(), 'image/png', expectedHash);
+      await assertImage(await images[i].convert(), 'image/png', control);
     }
   });
 
