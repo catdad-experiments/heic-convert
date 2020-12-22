@@ -38,7 +38,7 @@
     "rootrequire": "^1.0.0"
   },
   "dependencies": {
-    "heic-decode": "^1.1.0",
+    "heic-decode": "^1.1.2",
     "jpeg-js": "^0.4.1",
     "pngjs": "^3.4.0"
   },
