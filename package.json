@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "pretest": "node scripts/images.js",
-    "test": "mocha --timeout 20000 --slow 0 \"test/**/*.js\""
+    "test": "mocha --timeout 40000 --slow 0 \"test/**/*.js\""
   },
   "repository": {
     "type": "git",
