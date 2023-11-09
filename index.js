@@ -25,7 +25,7 @@ const convertImage = async ({ image, format, quality }) => {
   return await to[format]({
     width: image.width,
     height: image.height,
-    data: Buffer.from(image.data),
+    data: image.data,
     quality: Math.floor(quality * 100)
   });
 };
