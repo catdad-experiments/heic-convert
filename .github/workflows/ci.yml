@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: test with node ${{ matrix.node-version }}
+    strategy:
+      matrix:
+        node-version: [12, 14, 16, 18, 20]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm test
+      - name: Inspect tarball
+        run: npm pack --dry-run
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') && github.event_name != 'pull_request'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - run: npm publish --loglevel verbose
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
