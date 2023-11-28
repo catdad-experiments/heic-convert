@@ -1,8 +1,15 @@
+// jsdom is not supported in node < 16, and...
+// that's fine, because we don't need to run the browser
+// tests everywhere, just at least in one env
+if (Number(process.versions.node.split('.')[0]) < 16) {
+  return;
+}
+
 const JSDOM = require('jsdom').JSDOM;
 const canvas = require('canvas');
 const runTests = require('./run-tests.js');
 
-describe('heic-convert (browser)', () => {
+describe('heic-convert (browser image encoding)', () => {
   before(() => {
     const { window } = new JSDOM(``, {
       pretendToBeVisual: true
