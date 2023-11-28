@@ -3,7 +3,7 @@ const { PNG } = require('pngjs');
 
 module.exports = {};
 
-module.exports.JPEG = ({ data, width, height, quality }) => jpegJs.encode({ data, width, height }, quality).data;
+module.exports.JPEG = ({ data, width, height, quality }) => jpegJs.encode({ data, width, height }, Math.floor(quality * 100)).data;
 
 module.exports.PNG = ({ data, width, height }) => {
   const png = new PNG({ width, height });

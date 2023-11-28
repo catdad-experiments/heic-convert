@@ -4,7 +4,7 @@ module.exports = (decode, encode) => {
       width: image.width,
       height: image.height,
       data: image.data,
-      quality: Math.floor(quality * 100)
+      quality
     });
   };
 
