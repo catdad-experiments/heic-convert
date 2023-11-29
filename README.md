@@ -85,7 +85,7 @@ _Note that while the converter returns a Promise and is overall asynchronous, a 
 
 ## Usage in the browser
 
-While the NodeJS version of `heic-convert` may be compiled for use in the browser with something like `webpack`, [not all build tools necessarily like to compile all modules well](https://github.com/catdad-experiments/heic-convert/issues/29). However, what further complicates things is that this module uses pure-javascript implementations of a jpeg and png encoder. But the browser has its own native encoders! Let's just use those.
+While the NodeJS version of `heic-convert` may be compiled for use in the browser with something like `webpack`, [not all build tools necessarily like to compile all modules well](https://github.com/catdad-experiments/heic-convert/issues/29). However, what further complicates things is that this module uses pure-javascript implementations of a jpeg and png encoder. But the browser has its own native encoders! Let's just use those instead of including a ton of extra code in your bundle.
 
 When compiling a client-side project, use:
 
