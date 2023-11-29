@@ -18,7 +18,7 @@
 npm install heic-convert
 ```
 
-## Usage
+## Usage in NodeJS
 
 Convert the main image in a HEIC to JPEG
 
@@ -82,6 +82,18 @@ const convert = require('heic-convert');
 The work to convert an image is done when calling `image.convert()`, so if you only need one of the images in a multi-image file, you can convert just that one from the `images` array and skip doing any work for the remaining images.
 
 _Note that while the converter returns a Promise and is overall asynchronous, a lot of work is still done synchronously, so you should consider using a worker thread in order to not block the main thread in highly concurrent production environments._
+
+## Usage in the browser
+
+While the NodeJS version of `heic-convert` may be compiled for use in the browser with something like `webpack`, [not all build tools necessarily like to compile all modules well](https://github.com/catdad-experiments/heic-convert/issues/29). However, what further complicates things is that this module uses pure-javascript implementations of a jpeg and png encoder. But the browser has its own native encoders! Let's just use those.
+
+When compiling a client-side project, use:
+
+```javascript
+const convert = require('heic-convert/browser');
+```
+
+This is currently only supported in the main thread. Support for workers may be added in the future, but if you need it sooner, please create an issue or even a PR!
 
 ## Related
 
