@@ -1,37 +1,16 @@
-const jpegJs = require('jpeg-js');
-const { PNG } = require('pngjs');
-
-module.exports = decode => {
-  const to = {
-    JPEG: ({ data, width, height, quality }) => jpegJs.encode({ data, width, height }, quality).data,
-    PNG: ({ data, width, height }) => {
-      const png = new PNG({ width, height });
-      png.data = data;
-
-      return PNG.sync.write(png, {
-        width: width,
-        height: height,
-        deflateLevel: 9,
-        deflateStrategy: 3,
-        filterType: -1,
-        colorType: 6,
-        inputHasAlpha: true
-      });
-    }
-  };
-
+module.exports = (decode, encode) => {
   const convertImage = async ({ image, format, quality }) => {
-    return await to[format]({
+    return await encode[format]({
       width: image.width,
       height: image.height,
       data: image.data,
-      quality: Math.floor(quality * 100)
+      quality
     });
   };
 
   const convert = async ({ buffer, format, quality, all }) => {
-    if (!to[format]) {
-      throw new Error(`output format needs to be one of [${Object.keys(to)}]`);
+    if (!encode[format]) {
+      throw new Error(`output format needs to be one of [${Object.keys(encode)}]`);
     }
 
     if (!all) {
