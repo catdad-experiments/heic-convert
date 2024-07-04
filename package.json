@@ -3,6 +3,19 @@
   "version": "2.1.0",
   "description": "Convert HEIC/HEIF images to JPEG and PNG",
   "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.js",
+      "types": "./index.d.ts"
+    },
+    "./browser": {
+      "import": "./browser.js",
+      "require": "./browser.js",
+      "types": "./browser.d.ts"
+    }
+  },
   "scripts": {
     "pretest": "node scripts/images.js",
     "test": "mocha --timeout 40000 --slow 0 \"test/**/*.test.js\""
