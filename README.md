@@ -18,6 +18,16 @@
 npm install heic-convert
 ```
 
+## Usage
+
+You can convert the first image in a HEIC, or convert all images in the file. In both cases, the options are the same.
+
+### options object
+
+* `buffer` - a Node [`Buffer`](https://nodejs.org/api/buffer.html) or a [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) - the HEIC image to convert
+* `format` - string - either `JPEG` or `PNG`
+* `quality` - number between `0` and `1`, optional - the lossy compression quality to be used when converting to jpeg.
+
 ## Usage in NodeJS
 
 Convert the main image in a HEIC to JPEG
@@ -30,9 +40,9 @@ const convert = require('heic-convert');
 (async () => {
   const inputBuffer = await promisify(fs.readFile)('/path/to/my/image.heic');
   const outputBuffer = await convert({
-    buffer: inputBuffer, // the HEIC file buffer
-    format: 'JPEG',      // output format
-    quality: 1           // the jpeg compression quality, between 0 and 1
+    buffer: inputBuffer,
+    format: 'JPEG',
+    quality: 1
   });
 
   await promisify(fs.writeFile)('./result.jpg', outputBuffer);
@@ -49,8 +59,8 @@ const convert = require('heic-convert');
 (async () => {
   const inputBuffer = await promisify(fs.readFile)('/path/to/my/image.heic');
   const outputBuffer = await convert({
-    buffer: inputBuffer, // the HEIC file buffer
-    format: 'PNG'        // output format
+    buffer: inputBuffer,
+    format: 'PNG'
   });
 
   await promisify(fs.writeFile)('./result.png', outputBuffer);
@@ -67,8 +77,8 @@ const convert = require('heic-convert');
 (async () => {
   const inputBuffer = await promisify(fs.readFile)('/path/to/my/image.heic');
   const images = await convert.all({
-    buffer: inputBuffer, // the HEIC file buffer
-    format: 'JPEG'       // output format
+    buffer: inputBuffer,
+    format: 'JPEG'
   });
 
   for (let idx in images) {
